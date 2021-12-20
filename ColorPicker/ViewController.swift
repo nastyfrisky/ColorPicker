@@ -15,12 +15,19 @@ class ViewController: UIViewController {
     @IBOutlet var greenColorLabel: UILabel!
     @IBOutlet var blueColorLabel: UILabel!
     
-    var redValue: CGFloat = 0.5
-    var greenValue: CGFloat = 0.5
-    var blueValue: CGFloat = 0.5
+    private var redValue: CGFloat = 0.5
+    private var greenValue: CGFloat = 0.5
+    private var blueValue: CGFloat = 0.5
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        selectedColorView.backgroundColor = UIColor(
+            displayP3Red: redValue,
+            green: greenValue,
+            blue: blueValue,
+            alpha: 1
+        )
         
     }
     
