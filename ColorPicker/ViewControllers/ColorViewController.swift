@@ -13,9 +13,18 @@ protocol PickerViewControllerDelegate {
 
 class ColorViewController: UIViewController {
 
+    // MARK: - Override Methods
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard
+            let pickerVC = segue.destination as? PickerViewController
+        else { return }
+        pickerVC.colorView = view.backgroundColor
     }
 
 }

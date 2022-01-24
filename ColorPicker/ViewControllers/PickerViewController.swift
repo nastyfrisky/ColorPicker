@@ -25,19 +25,23 @@ class PickerViewController: UIViewController {
     @IBOutlet var greenTextField: UITextField!
     @IBOutlet var blueTextField: UITextField!
     
+    // MARK: - Public Properties
+    
+    var colorView: UIColor!
+    
     // MARK: - Override Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        selectedColorView.backgroundColor = UIColor(
-            displayP3Red: CGFloat(redSlider.value),
-            green: CGFloat(greenSlider.value),
-            blue: CGFloat(blueSlider.value),
-            alpha: 1
-        )
+        let colors = CIColor(color: colorView)
+        
+        redTextField.text = colors.red.description
+        greenTextField.text = colors.green.description
+        blueTextField.text = colors.blue.description
         
         setupTextFields()
+        textFieldDidEndEditing(redTextField)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
