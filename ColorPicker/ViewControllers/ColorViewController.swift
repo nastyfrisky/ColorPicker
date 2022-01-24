@@ -8,7 +8,7 @@
 import UIKit
 
 protocol PickerViewControllerDelegate {
-    func setNewColor()
+    func setNewColor(color: UIColor)
 }
 
 class ColorViewController: UIViewController {
@@ -17,7 +17,8 @@ class ColorViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -25,6 +26,14 @@ class ColorViewController: UIViewController {
             let pickerVC = segue.destination as? PickerViewController
         else { return }
         pickerVC.colorView = view.backgroundColor
+        pickerVC.delegate = self
     }
 
+}
+
+extension ColorViewController: PickerViewControllerDelegate {
+    func setNewColor(color: UIColor) {
+        view.backgroundColor = color
+    }
+    
 }

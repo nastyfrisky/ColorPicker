@@ -28,6 +28,7 @@ class PickerViewController: UIViewController {
     // MARK: - Public Properties
     
     var colorView: UIColor!
+    var delegate: PickerViewControllerDelegate!
     
     // MARK: - Override Methods
     
@@ -36,12 +37,12 @@ class PickerViewController: UIViewController {
         
         let colors = CIColor(color: colorView)
         
-        redTextField.text = colors.red.description
-        greenTextField.text = colors.green.description
-        blueTextField.text = colors.blue.description
+        redSlider.value = Float(colors.red)
+        greenSlider.value = Float(colors.green)
+        blueSlider.value = Float(colors.blue)
         
         setupTextFields()
-        textFieldDidEndEditing(redTextField)
+        rgbComponentsSlider()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -63,6 +64,10 @@ class PickerViewController: UIViewController {
         setViewColor()
     }
     
+    @IBAction func doneButtonPressed() {
+        delegate.setNewColor(color: selectedColorView.backgroundColor ?? .clear)
+        dismiss(animated: true)
+    }
     // MARK: - Private methods
     
     private func setViewColor() {
