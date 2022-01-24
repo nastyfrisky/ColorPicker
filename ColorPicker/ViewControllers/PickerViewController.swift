@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PickerViewController: UIViewController, UITextFieldDelegate {
+class PickerViewController: UIViewController {
     
     // MARK: - IB Outlets
 
@@ -71,17 +71,41 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
     }
     private func setupTextFields() {
         let bar = UIToolbar()
-        let leftSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(toolbarDoneTapped))
+        let leftSpace = UIBarButtonItem(
+            barButtonSystemItem: .flexibleSpace,
+            target: nil,
+            action: nil
+        )
+        let doneButton = UIBarButtonItem(
+            title: "Done",
+            style: .done,
+            target: self,
+            action: #selector(toolbarDoneTapped)
+        )
         bar.items = [leftSpace, doneButton]
         bar.sizeToFit()
         
         redTextField.inputAccessoryView = bar
         greenTextField.inputAccessoryView = bar
         blueTextField.inputAccessoryView = bar
+        
+        redTextField.delegate = self
+        greenTextField.delegate = self
+        blueTextField.delegate = self
     }
     
     @objc private func toolbarDoneTapped() {
+        view.endEditing(true)
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension PickerViewController: UITextFieldDelegate {
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard validateInput() else { return }
+        
         redColorLabel.text = redTextField.text
         greenColorLabel.text = greenTextField.text
         blueColorLabel.text = blueTextField.text
@@ -91,9 +115,52 @@ class PickerViewController: UIViewController, UITextFieldDelegate {
         blueSlider.value = Float(blueTextField.text ?? "1.00") ?? 1.00
         
         setViewColor()
+    }
+    
+    func validateInput() -> Bool {
+        let redTextField = Float(redTextField.text ?? "")
+        let greenTextField = Float(greenTextField.text ?? "")
+        let blueTextField = Float(blueTextField.text ?? "")
+
+        guard
+            let redTextField = redTextField,
+            redTextField >= 0,
+            redTextField <= 1
+        else {
+            displayAnAlert()
+            return false
+        }
         
-        view.endEditing(true)
+        guard
+            let greenTextField = greenTextField,
+            greenTextField >= 0,
+            greenTextField <= 1
+        else {
+            displayAnAlert()
+            return false
+        }
+        
+        guard
+            let blueTextField = blueTextField,
+            blueTextField >= 0,
+            blueTextField <= 1
+        else {
+            displayAnAlert()
+            return false
+        }
+        
+        return true
+    }
+    
+    func displayAnAlert() {
+        let alertController = UIAlertController(
+            title: "Error!",
+            message: "Enter a number from 0 to 1",
+            preferredStyle: .alert
+        )
+               let action = UIAlertAction(title: "OK", style: .default)
+               alertController.addAction(action)
+               present(alertController, animated: true)
     }
 }
-
 
